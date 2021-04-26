@@ -86,9 +86,18 @@ router.post(
   
       // Optional: Not Checking if social links are undefined,
       // therefore we have to specifiy them in body with empty string
+      // youtube: youtube ? youtube : ''
+      // youtube: youtube && ''
 
       // Build social object and add them to profileFields
-      const socialfields = { youtube, twitter, instagram, linkedin, facebook, github };
+      const socialfields = { 
+          youtube, 
+          twitter, 
+          instagram, 
+          linkedin, 
+          facebook, 
+          github 
+        };
   
       for (const [key, value] of Object.entries(socialfields)) {
         if (value.length > 0) {
@@ -112,6 +121,41 @@ router.post(
       }
 });
 
+// @route  GET api/profile
+// @desc   Get all user profiles
+// @access  Public
+router.get('/', async (req, res) => {
+    try {
+        const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+
+        res.json(profiles);
+    } catch (error) {
+        res.status(500).send('Server Error');        
+    }
+
+});
+
+// @route  GET api/profile/user/:userid
+// @desc   Get profile by user id
+// @access  Public
+router.get('/user/:userid', async (req, res) => {
+    try {
+        const profile = await Profile.findOne({user: req.params.userid}).populate('user', ['name', 'avatar']);
+
+        if (!profile) {
+            return res.status(400).json({msg: 'Profile not found'});
+        }
+
+        res.json(profile);
+    } catch (error) {
+        // check if param is a valid object Id
+        if (error.kind === 'ObjectId') {
+            return res.status(400).json({msg: 'Profile not found'});
+        }
+        res.status(500).send('Server Error');        
+    }
+
+});
 
 
 module.exports = router;
