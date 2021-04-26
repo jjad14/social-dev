@@ -2,6 +2,8 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const User = require('../../models/User');
 
@@ -57,13 +59,28 @@ router.post(
             // save user to db
             await user.save();
 
-            // Return token   
-            res.send('User registered');
+            // Create payload   
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            };
+
+            // Create token
+            jwt.sign(
+                payload, 
+                process.env.JWT_TOKEN_SECRET, 
+                { expiresIn: 3600},
+                (err, token) => {
+                    if (err) throw err;
+                    // return token
+                    res.json({ token });
+                }
+            );
 
         } catch (error) {
             res.status(500).send('Server Error');
         }
-
 });
 
 module.exports = router;
