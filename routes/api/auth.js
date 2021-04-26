@@ -9,7 +9,7 @@ const router = express.Router();
 
 // @route   GET api/auth
 // @desc    Get logged a user
-// @access  Public
+// @access  Private
 router.get('/', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
@@ -57,7 +57,7 @@ router.post(
             const isMatch = await bcrypt.compare(password, user.password);
 
             if (!isMatch) {
-                return res.status(400).json({ errors: [ {msg: 'Invalid Credentialsss'} ] });    
+                return res.status(400).json({ errors: [ {msg: 'Invalid Credentials'} ] });    
             }
 
             // Create token
