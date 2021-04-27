@@ -3,6 +3,8 @@ const { body, validationResult } = require('express-validator');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const normalize = require('normalize-url');
+
 require('dotenv').config();
 
 const User = require('../../models/User');
@@ -37,11 +39,14 @@ router.post(
             }
 
             // Get Users Gravitar
-            const avatar = gravatar.url(email, {
-                s: '200', // size
-                r: 'pg', // rating: censorship 
-                d: 'mm' // default: mm is for mystery man
-            });
+            const avatar = normalize(
+                gravatar.url(email, {
+                    s: '200', // size
+                    r: 'pg', // rating: censorship 
+                    d: 'mm' // default: mm is for mystery man
+                }),
+                { forceHttps: true }
+            );
 
             // user instance
             user = new User({
