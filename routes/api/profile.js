@@ -5,6 +5,7 @@ const { body, validationResult } = require('express-validator');
 const normalize = require('normalize-url');
 
 const auth = require('../../middleware/auth');
+const checkObjectId = require('../../middleware/checkObjectId');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const Post = require('../../models/Post');
@@ -130,13 +131,8 @@ router.get('/', async (req, res) => {
 // @route  GET api/profile/user/:userid
 // @desc   Get profile by user id
 // @access  Public
-router.get('/user/:userid', async (req, res) => {
+router.get('/user/:userid', checkObjectId('userid'), async (req, res) => {
     try {
-      // check if id is a valid ObjectId
-      if (!mongoose.Types.ObjectId.isValid(req.params.userid)) {
-          return res.status(404).json({ msg: 'User was not found' });
-      }
-
       const profile = await Profile.findOne({user: req.params.userid}).populate('user', ['name', 'avatar']);
 
       if (!profile) {
@@ -218,7 +214,8 @@ router.put(
 router.put(
     '/experience/:expId', 
     [
-        auth, 
+        auth,
+        checkObjectId('expId'), 
         [
             body('title', 'A Title is required').not().isEmpty(),
             body('company', 'A Company is required').not().isEmpty(),
@@ -246,11 +243,6 @@ router.put(
     if (description) exp.description = description;
 
     try {
-      // check if expId is a valid ObjectId
-      if (!mongoose.Types.ObjectId.isValid(req.params.expId)) {
-          return res.status(404).json({ msg: 'Experience was not found' });
-      }
-
       // find profile by user id and param expId,
       // update experience while keeping original id
       const profileToUpdate = await Profile
@@ -269,13 +261,8 @@ router.put(
 // @route  DELETE api/profile/experience/:expId
 // @desc   Delete Profile Experience
 // @access Private
-router.delete('/experience/:expId', auth, async (req, res) => {
+router.delete('/experience/:expId', [auth, checkObjectId('expId')], async (req, res) => {
     try {
-      // check if expId is a valid ObjectId
-      if (!mongoose.Types.ObjectId.isValid(req.params.expId)) {
-        return res.status(404).json({ msg: 'Experience was not found' });
-      }
-
       // find profile by user id
       const profile = await Profile.findOne({ user: req.user.id });
   
@@ -338,13 +325,8 @@ router.put(
 // @route  DELETE api/profile/education/:eduId
 // @desc   Delete Profile Education
 // @access Private
-router.delete('/education/:eduId', auth, async (req, res) => {
+router.delete('/education/:eduId', [auth, checkObjectId('eduId')], async (req, res) => {
     try {
-      // check if expId is a valid ObjectId
-      if (!mongoose.Types.ObjectId.isValid(req.params.eduId)) {
-        return res.status(404).json({ msg: 'Education was not found' });
-      }
-
       // find profile by user id
       const profile = await Profile.findOne({ user: req.user.id });
   

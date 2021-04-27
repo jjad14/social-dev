@@ -1,8 +1,8 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const mongoose = require('mongoose');
 
 const auth = require('../../middleware/auth');
+const checkObjectId = require('../../middleware/checkObjectId');
 const Post = require('../../models/Post');
 const User = require('../../models/User');
 
@@ -68,14 +68,9 @@ router.get(
 // @route   GET api/posts/:id
 // @desc    Get post by id
 // @access  Private
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', [auth, checkObjectId('id')], async (req, res) => {
     
     try {
-        // check if id is a valid ObjectId
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(404).json({ msg: 'Post was not found' });
-        }
-
         // get posts by most recent
         const post = await Post.findById(req.params.id);
 
@@ -93,14 +88,9 @@ router.get('/:id', auth, async (req, res) => {
 // @route   DELETE api/posts/:id
 // @desc    Delete post by id
 // @access  Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', [auth, checkObjectId('id')], async (req, res) => {
     
     try {
-        // check if id is a valid ObjectId
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(404).json({ msg: 'Post was not found' });
-        }
-
         // get posts by most recent
         const post = await Post.findById(req.params.id);
 
@@ -125,13 +115,8 @@ router.delete('/:id', auth, async (req, res) => {
 // @route    PUT api/posts/like/:id
 // @desc     Like a post
 // @access   Private
-router.put('/like/:id', auth, async (req, res) => {
+router.put('/like/:id', [auth, checkObjectId('id')], async (req, res) => {
     try {
-        // check if id is a valid ObjectId
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(404).json({ msg: 'Post was not found' });
-        }
-
         // find post
         const post = await Post.findById(req.params.id);
 
@@ -159,13 +144,8 @@ router.put('/like/:id', auth, async (req, res) => {
 // @route    PUT api/posts/unlike/:id
 // @desc     Unlike a post
 // @access   Private
-router.put('/unlike/:id', auth, async (req, res) => {
+router.put('/unlike/:id', [auth, checkObjectId('id')], async (req, res) => {
     try {
-        // check if id is a valid ObjectId
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(404).json({ msg: 'Post was not found' });
-        }
-
         // Find post by id
         const post = await Post.findById(req.params.id);
 
@@ -199,6 +179,7 @@ router.post(
     '/comment/:id', 
     [
         auth,
+        checkObjectId('id'),
         [
             body('text', 'Text is required').not().isEmpty()
         ]
@@ -212,11 +193,6 @@ router.post(
     }
 
     try {
-        // check if id is a valid ObjectId
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(404).json({ msg: 'Post was not found' });
-        }
-
         // get user
         const user = await User
             .findById(req.user.id)
@@ -250,18 +226,14 @@ router.post(
 // @access   Private
 router.delete(
     '/comment/:id/:commentId', 
-    auth, 
+    [
+        auth,
+        checkObjectId('id'),
+        checkObjectId('commentId'),
+    ], 
     async (req, res) => {
 
     try {
-
-      // check if ids are valid object Ids
-      if (!mongoose.Types.ObjectId.isValid(req.params.id) || 
-          !mongoose.Types.ObjectId.isValid(req.params.commentId)) 
-      {
-        return res.status(404).json({ msg: 'Record was not found' });
-      }
-
       // Get Post by Id
       const post = await Post.findById(req.params.id);
   
