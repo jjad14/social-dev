@@ -108,7 +108,7 @@ router.post(
 
     res.json(profile);
     } catch (err) {
-    res.status(500).send('Server Error');
+        res.status(500).send('Server Error');
     }
 });
 
