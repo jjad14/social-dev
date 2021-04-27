@@ -167,5 +167,100 @@ router.delete('/', auth, async (req, res) => {
     }
 });
 
+// @route  PUT api/profile/experience
+// @desc   Add experience to profile
+// @access  Private
+router.put(
+    '/experience', 
+    [
+        auth, 
+        [
+            body('title', 'A Title is required').not().isEmpty(),
+            body('company', 'A Company is required').not().isEmpty(),
+            body('from', 'A From Date is required').not().isEmpty()
+        ]
+    ], 
+    async (req, res) => {
+        
+    // check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    // pull fields from request body
+    const {title, company, location, from, to, current, description} = req.body;
+
+    // create a new experience object
+    const newExperience = {title, company, location, from, to, current, description};
+
+    try {
+        const profile = await Profile.findOne({ user: req.user.id });
+
+        // unshift pushes to begining rather than end (push)
+        profile.experience.unshift(newExperience);
+
+        await profile.save();
+
+        res.json(profile);
+
+    } catch (error) {
+        res.status(500).send('Server Error');        
+    }
+});
+
+// @route  PUT api/profile/experience/:expId
+// @desc   Update experience from profile
+// @access  Private
+router.put(
+    '/experience/:expId', 
+    [
+        auth, 
+        [
+            body('title', 'A Title is required').not().isEmpty(),
+            body('company', 'A Company is required').not().isEmpty(),
+            body('from', 'A From Date is required').not().isEmpty()
+        ]
+    ],
+    async (req, res) => {
+ 
+    // check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+   // pull fields from request body
+    const {title, company, location, from, to, current, description} = req.body;
+
+    // experience must have a title, company and from
+    const exp = { title, company, from };
+
+    // check if optional fields are valid
+    if (location) exp.location = location;
+    if (to) exp.to = to;
+    if (current) exp.current = current;
+    if (description) exp.description = description;
+
+    try {
+        // find profile by user id and param expId,
+        // update experience while keeping original id
+        const profileToUpdate = await Profile
+            .findOneAndUpdate(
+               {user: req.user.id, 'experience._id': req.params.expId},
+               {$set: { 'experience.$': {_id: req.params.expId, ...exp}}},
+               {new: true}
+            );
+
+        res.json({profileToUpdate});
+    } catch (error) {
+        res.status(500).send('Server Error');  
+    }
+
+
+});
+
+
+
 
 module.exports = router;
