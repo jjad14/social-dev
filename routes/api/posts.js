@@ -1,9 +1,9 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
+const mongoose = require('mongoose');
 
 const auth = require('../../middleware/auth');
 const Post = require('../../models/Post');
-const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
 const router = express.Router();
@@ -68,12 +68,14 @@ router.get(
 // @route   GET api/posts/:id
 // @desc    Get post by id
 // @access  Private
-router.get(
-    '/:id', 
-     auth,
-    async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
     
     try {
+        // check if id is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(post_id)) {
+            return res.status(404).json({ msg: 'Post was not found' });
+        }
+
         // get posts by most recent
         const post = await Post.findById(req.params.id);
 
@@ -84,9 +86,6 @@ router.get(
 
         res.json(post);
     } catch (error) {
-        if (error.kind === 'ObjectId') {
-            return res.status(404).json({msg: 'Post was not found'});
-        }
         res.status(500).send('Server Error');
     }
 });
@@ -94,12 +93,14 @@ router.get(
 // @route   DELETE api/posts/:id
 // @desc    Delete post by id
 // @access  Private
-router.delete(
-    '/:id', 
-     auth,
-    async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     
     try {
+        // check if id is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(post_id)) {
+            return res.status(404).json({ msg: 'Post was not found' });
+        }
+
         // get posts by most recent
         const post = await Post.findById(req.params.id);
 
@@ -117,14 +118,79 @@ router.delete(
 
         res.json({msg: 'The post has been removed'});
     } catch (error) {
-        if (error.kind === 'ObjectId') {
-            return res.status(404).json({msg: 'Post was not found'});
-        }
         res.status(500).send('Server Error');
     }
-    });
+});
 
+// @route    PUT api/posts/like/:id
+// @desc     Like a post
+// @access   Private
+router.put('/like/:id', auth, async (req, res) => {
+    try {
+        // check if id is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(post_id)) {
+            return res.status(404).json({ msg: 'Post was not found' });
+        }
 
+        // find post
+        const post = await Post.findById(req.params.id);
+
+        // check if post was found
+        if (!post) {
+            return res.status(404).json({msg: 'Post was not found'});
+        }
+
+        // Check if the post has already been liked by current user
+        if (post.likes.some((like) => like.user.toString() === req.user.id)) {
+            return res.status(400).json({ msg: 'Post has already been liked' });
+        }
+
+        // add like to post
+        post.likes.unshift({ user: req.user.id });
+
+        await post.save();
+  
+        res.json(post.likes);
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route    PUT api/posts/unlike/:id
+// @desc     Unlike a post
+// @access   Private
+router.put('/unlike/:id', auth, async (req, res) => {
+    try {
+        // check if id is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(post_id)) {
+            return res.status(404).json({ msg: 'Post was not found' });
+        }
+
+        // Find post by id
+        const post = await Post.findById(req.params.id);
+
+        // check if post was found
+        if (!post) {
+            return res.status(404).json({msg: 'Post was not found'});
+        }
+
+        // Check if the post has not yet been liked by user
+        if (!post.likes.some((like) => like.user.toString() === req.user.id)) {
+            return res.status(400).json({ msg: 'Post has not yet been liked' });
+        }
+
+        // remove the like from current user
+        post.likes = post.likes.filter(({user}) => 
+            user.toString() !== req.user.id
+        );
+
+        await post.save();
+
+        res.json(post.likes);
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+});
 
 
 module.exports = router;
