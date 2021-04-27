@@ -259,7 +259,7 @@ router.delete(
       if (!mongoose.Types.ObjectId.isValid(req.params.id) || 
           !mongoose.Types.ObjectId.isValid(req.params.commentId)) 
       {
-        return res.status(404).json({ msg: 'Post was not found' });
+        return res.status(404).json({ msg: 'Record was not found' });
       }
 
       // Get Post by Id

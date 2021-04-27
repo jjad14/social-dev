@@ -7,6 +7,7 @@ const normalize = require('normalize-url');
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 const router = express.Router();
 
@@ -131,18 +132,19 @@ router.get('/', async (req, res) => {
 // @access  Public
 router.get('/user/:userid', async (req, res) => {
     try {
-        const profile = await Profile.findOne({user: req.params.userid}).populate('user', ['name', 'avatar']);
+      // check if id is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(req.params.userid)) {
+          return res.status(404).json({ msg: 'User was not found' });
+      }
 
-        if (!profile) {
-            return res.status(400).json({msg: 'Profile not found'});
-        }
+      const profile = await Profile.findOne({user: req.params.userid}).populate('user', ['name', 'avatar']);
 
-        res.json(profile);
+      if (!profile) {
+          return res.status(400).json({msg: 'Profile not found'});
+      }
+
+      res.json(profile);
     } catch (error) {
-        // check if param is a valid object Id
-        if (error.kind === 'ObjectId') {
-            return res.status(400).json({msg: 'Profile not found'});
-        }
         res.status(500).send('Server Error');        
     }
 
@@ -154,6 +156,7 @@ router.get('/user/:userid', async (req, res) => {
 router.delete('/', auth, async (req, res) => {
     try {
         // TODO: remove users posts
+        await Post.deleteMany({ user: req.user.id });
 
         // remove profile
         await Profile.findOneAndRemove({ user: req.user.id});
@@ -243,16 +246,21 @@ router.put(
     if (description) exp.description = description;
 
     try {
-        // find profile by user id and param expId,
-        // update experience while keeping original id
-        const profileToUpdate = await Profile
-            .findOneAndUpdate(
-               {user: req.user.id, 'experience._id': req.params.expId},
-               {$set: { 'experience.$': {_id: req.params.expId, ...exp}}},
-               {new: true}
-            );
+      // check if expId is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(req.params.expId)) {
+          return res.status(404).json({ msg: 'Experience was not found' });
+      }
 
-        res.json({profileToUpdate});
+      // find profile by user id and param expId,
+      // update experience while keeping original id
+      const profileToUpdate = await Profile
+          .findOneAndUpdate(
+              {user: req.user.id, 'experience._id': req.params.expId},
+              {$set: { 'experience.$': {_id: req.params.expId, ...exp}}},
+              {new: true}
+          );
+
+      res.json({profileToUpdate});
     } catch (error) {
         res.status(500).send('Server Error');  
     }
@@ -263,6 +271,11 @@ router.put(
 // @access Private
 router.delete('/experience/:expId', auth, async (req, res) => {
     try {
+      // check if expId is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(req.params.expId)) {
+        return res.status(404).json({ msg: 'Experience was not found' });
+      }
+
       // find profile by user id
       const profile = await Profile.findOne({ user: req.user.id });
   
@@ -327,6 +340,11 @@ router.put(
 // @access Private
 router.delete('/education/:eduId', auth, async (req, res) => {
     try {
+      // check if expId is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(req.params.eduId)) {
+        return res.status(404).json({ msg: 'Education was not found' });
+      }
+
       // find profile by user id
       const profile = await Profile.findOne({ user: req.user.id });
   
