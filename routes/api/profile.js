@@ -61,13 +61,7 @@ router.post(
         bio,
         status,
         githubusername,
-        skills,
-        youtube,
-        facebook,
-        twitter,
-        instagram,
-        linkedin,
-        github
+        skills
     } = req.body;
 
     // build profile object
@@ -82,43 +76,40 @@ router.post(
           : skills.split(',').map(skill => '' + skill.trim()),
         status,
         githubusername
-      };
-  
-      // Optional: Not Checking if social links are undefined,
-      // therefore we have to specifiy them in body with empty string
-      // youtube: youtube ? youtube : ''
-      // youtube: youtube && ''
+    };
 
-      // Build social object and add them to profileFields
-      const socialfields = { 
-          youtube, 
-          twitter, 
-          instagram, 
-          linkedin, 
-          facebook, 
-          github 
-        };
-  
-      for (const [key, value] of Object.entries(socialfields)) {
-        if (value.length > 0) {
-            socialfields[key] = normalize(value, { forceHttps: true });
-        }
-      }
+      // Build social array
+    const socialFields = [ 
+        'youtube', 
+        'twitter', 
+        'instagram', 
+        'linkedin', 
+        'facebook', 
+        'github' 
+    ];
 
-      profileFields.social = socialfields;
+    // init social field as an object
+    profileFields.social = {};
 
-      try {
-        // Using upsert option (creates new doc if no match is found):
-        let profile = await Profile.findOneAndUpdate(
-          { user: req.user.id },
-          { $set: profileFields },
-          { new: true, upsert: true }
-        );
+    // if the field exists in req.body, add it to object
+    socialFields.forEach(field => {
+        if (req.body[field]) {
+            profileFields.social[field] = req.body[field];
+        } 
+    });
 
-        res.json(profile);
-      } catch (err) {
-        res.status(500).send('Server Error');
-      }
+    try {
+    // Using upsert option (creates new doc if no match is found):
+    let profile = await Profile.findOneAndUpdate(
+        { user: req.user.id },
+        { $set: profileFields },
+        { new: true, upsert: true }
+    );
+
+    res.json(profile);
+    } catch (err) {
+    res.status(500).send('Server Error');
+    }
 });
 
 // @route  GET api/profile
