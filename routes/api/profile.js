@@ -263,8 +263,10 @@ router.put(
 // @access Private
 router.delete('/experience/:expId', auth, async (req, res) => {
     try {
+      // find profile by user id
       const profile = await Profile.findOne({ user: req.user.id });
   
+      // filter out the experience using query parameter
       profile.experience = profile.experience.filter(
         exp => exp._id.toString() !== req.params.expId
       );
@@ -272,7 +274,6 @@ router.delete('/experience/:expId', auth, async (req, res) => {
       await profile.save();
 
       res.status(200).json(foundProfile);
-    
     } catch (error) {
         res.status(500).json({ msg: 'Server error' });
     }
