@@ -1,19 +1,28 @@
 import React, { Fragment } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
+import Footer from './components/layout/Footer';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
 
-const App = () => {
-  return (
+const App = () => (
+  <BrowserRouter>
     <Fragment>
       <Navbar />
-      <Landing />
-      <footer className='fixed-bottom bg-dark text-white mt-4 p-2 text-center'>
-      Copyright &copy; {new Date().getFullYear()} Social Dev
-    </footer>
+
+      <Route exact path="/" component={Landing} />
+      <section className="container">
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+        </Switch>
+      </section>
+
     </Fragment>
-  );
-};
+  </BrowserRouter>
+);
 
 export default App;
