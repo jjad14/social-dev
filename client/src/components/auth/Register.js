@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -8,13 +9,14 @@ const Register = () => {
         password2: ''
     });
 
+    // pull values out
     const { name, email, password, password2 } = formData;
 
     const onChangeHandler = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value});
     };
     
-    const onSubmitHandler = (e) => {
+    const onSubmitHandler = async (e) => {
         e.preventDefault();
 
         // passwords match
@@ -30,8 +32,13 @@ const Register = () => {
     return (
         <Fragment>
             <section className="container card">
-                <h1 className="large text-primary text-center">Sign Up</h1>
-                <p className="lead text-center"><i className="fas fa-user"></i> Create Your Account</p>
+                <h1 className="large text-primary text-center">
+                    Sign Up
+                </h1>
+                <p className="lead text-center">
+                    <i className="fas fa-user"></i> 
+                    &nbsp;Create Your Account
+                </p>
                 <form className="form" onSubmit={onSubmitHandler}>
                     <div className="form-group">
                         <input 
@@ -82,7 +89,8 @@ const Register = () => {
                     </div>
                 </form>
                     <p className="my-1 text-center">
-                        Already have an account? <a href="login.html">Sign In</a>
+                        Already have an account?&nbsp;
+                        <Link to="/login">Sign In</Link>
                     </p>
             </section>
         </Fragment>
