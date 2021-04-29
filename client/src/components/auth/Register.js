@@ -1,17 +1,20 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { setAlert } from '../../actions/alert';
 
-const Register = ({ setAlert }) => {
+const Register = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
         password2: ''
     });
+
+    // Access the redux dispatch function
+    const dispatch = useDispatch()
 
     // pull values out
     const { name, email, password, password2 } = formData;
@@ -25,7 +28,8 @@ const Register = ({ setAlert }) => {
 
         // passwords match
         if (password !== password2) {
-            setAlert('Passwords do not match', 'danger');
+            // setAlert('Passwords do not match', 'danger');
+            dispatch(setAlert('Passwords do not match!', 'danger'))
         }
         else {
             console.log(formData);
@@ -105,4 +109,4 @@ Register.propTypes = {
     setAlert: PropTypes.func.isRequired
 };
 
-export default connect(null, { setAlert })(Register);
+export default Register;
