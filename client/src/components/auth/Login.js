@@ -1,5 +1,9 @@
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector  } from 'react-redux';
+
+import { login } from '../../actions/auth';
+
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -10,6 +14,14 @@ const Login = () => {
     // pull values out
     const { email, password } = formData;
 
+    // Access the redux dispatch function
+    const dispatch = useDispatch();
+
+    // retrieve state from redux store
+    const isAuthenticated = useSelector(state => 
+        state.auth.isAuthenticated
+    );
+
     const onChangeHandler = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value});
     };
@@ -17,14 +29,20 @@ const Login = () => {
     const onSubmitHandler = async (e) => {
         e.preventDefault();
 
-        console.log(formData);
+        // call login dispatch function
+        dispatch(login(email, password));
     };
+
+    // Redirect if authenticated
+    if (isAuthenticated) {
+        return <Redirect to="/dashboard" />;
+    }
 
     return (
         <Fragment>
             <section className="container card">
                 <h1 className="large text-primary text-center">
-                    Sign Up
+                    Sign In
                 </h1>
                 <p className="lead text-center">
                     <i className="fas fa-user"></i> 
@@ -38,6 +56,7 @@ const Login = () => {
                             name="email"
                             value={email}
                             required
+                            autoComplete="off"
                             onChange={e => onChangeHandler(e)}/>
                     </div>
                     <div className="form-group">
@@ -48,6 +67,7 @@ const Login = () => {
                             minLength="6"
                             value={password}
                             required
+                            autoComplete="new-password"
                             onChange={e => onChangeHandler(e)}/>
                     </div>
                     <div className="text-center">
@@ -64,5 +84,7 @@ const Login = () => {
         </Fragment>
     );
 };
+
+
 
 export default Login;

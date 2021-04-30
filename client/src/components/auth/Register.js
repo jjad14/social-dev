@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import { Link, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
 import { setAlert } from '../../actions/alert';
@@ -17,6 +16,11 @@ const Register = () => {
 
     // Access the redux dispatch function
     const dispatch = useDispatch();
+
+    // retrieve state from redux store
+    const isAuthenticated = useSelector(state => 
+        state.auth.isAuthenticated
+    );
 
     // pull values out
     const { name, email, password, password2 } = formData;
@@ -35,9 +39,15 @@ const Register = () => {
             dispatch(setAlert('Passwords do not match!', 'danger'))
         }
         else {
+            // call register dispatch function
             dispatch(register({ name, email, password }));
         }
     };
+
+    // Redirect if authenticated
+    if (isAuthenticated) {
+        return <Redirect to="/dashboard" />;
+    }
 
     return (
         <Fragment>
@@ -109,11 +119,6 @@ const Register = () => {
             </section>
         </Fragment>
     );
-};
-
-Register.propTypes = {
-    setAlert: PropTypes.func,
-    register: PropTypes.func
 };
 
 export default Register;
