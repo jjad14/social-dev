@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
+// Actions
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -14,27 +16,27 @@ const Register = () => {
     });
 
     // Access the redux dispatch function
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     // pull values out
     const { name, email, password, password2 } = formData;
 
+    // Input change handler
     const onChangeHandler = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value});
     };
     
+    // Submit Registration Form
     const onSubmitHandler = async (e) => {
         e.preventDefault();
 
         // passwords match
         if (password !== password2) {
-            // setAlert('Passwords do not match', 'danger');
             dispatch(setAlert('Passwords do not match!', 'danger'))
         }
         else {
-            console.log(formData);
+            dispatch(register({ name, email, password }));
         }
-
     };
 
     return (
@@ -55,6 +57,7 @@ const Register = () => {
                             name="name" 
                             required
                             value={name}
+                            autoComplete="off"
                             onChange={e => onChangeHandler(e)}/>
                     </div>
                     <div className="form-group">
@@ -64,6 +67,7 @@ const Register = () => {
                             name="email"
                             value={email}
                             required
+                            autoComplete="off"
                             onChange={e => onChangeHandler(e)}/>
 
                         <small className="form-text">
@@ -77,6 +81,7 @@ const Register = () => {
                             name="password"
                             minLength="6"
                             value={password}
+                            autoComplete="off"
                             required
                             onChange={e => onChangeHandler(e)}/>
                     </div>
@@ -88,6 +93,7 @@ const Register = () => {
                             value={password2}
                             minLength="6"
                             required
+                            autoComplete="off"
                             onChange={e => onChangeHandler(e)}/>
                     </div>
                     <div className="text-center">
@@ -106,7 +112,8 @@ const Register = () => {
 };
 
 Register.propTypes = {
-    setAlert: PropTypes.func.isRequired
+    setAlert: PropTypes.func,
+    register: PropTypes.func
 };
 
 export default Register;
