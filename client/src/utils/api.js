@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store';
-import { LOGOUT } from '../actions/types';
+import * as types from '../actions/types';
 
 // Axios Configuration
 const api = axios.create({
@@ -10,14 +10,13 @@ const api = axios.create({
   }
 });
 
-
 // intercept any error responses from the api and check if the token is no longer valid
 api.interceptors.response.use(
   res => res,
   err => {
     // logout the user if the token has expired
     if (err.response.status === 401) {
-      store.dispatch({ type: LOGOUT });
+      store.dispatch({ type: types.LOGOUT });
     }
     return Promise.reject(err);
   }

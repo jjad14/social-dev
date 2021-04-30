@@ -24,7 +24,7 @@ const App = () => {
       setAuthToken(localStorage.token);
     }
 
-    store.dispatch(loadUser);
+    store.dispatch(loadUser());
 
     // log user out from all tabs if they log out
     window.addEventListener('storage', () => {
@@ -32,7 +32,7 @@ const App = () => {
         store.dispatch({ type: types.LOGOUT});
       }
     });
-  });
+  }, []);
 
 
   return (
