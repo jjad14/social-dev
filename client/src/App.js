@@ -10,10 +10,13 @@ import setAuthToken from './utils/setAuthToken';
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
+import Dashboard from './components/dashboard/Dashboard';
 // import Footer from './components/layout/Footer';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Alert from './components/layout/Alert';
+
+import PrivateRoute from './components/routing/PrivateRoute';
 import * as types from './actions/types';
 
 const App = () => {
@@ -47,6 +50,7 @@ const App = () => {
             <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
             </Switch>
           </section>
 
