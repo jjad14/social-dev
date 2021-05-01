@@ -2,7 +2,9 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useSelector  } from 'react-redux';
 
-const PrivateRoute = (props) => {
+import Spinner from '../layout/Spinner';
+
+const PrivateRoute = ({component: Component, ...rest}) => {
 
     // retrieve state from redux store
     const isAuthenticated = useSelector(state => 
@@ -13,15 +15,19 @@ const PrivateRoute = (props) => {
         state.auth.loading
     );
 
-    // if user is not authenticated and not loading, redirect to login
-    if (!isAuthenticated && !loading) {
-        return <Redirect to="/login" />;
-    }
-    else {
-        // else, display component (i.e. dashboard)
-        return <Route exact path={props.path} component={props.component} />;
-    }
 
+    return (
+        <Route {...rest} render={props => 
+            loading ? (
+                <Spinner />
+            ) : isAuthenticated ? (
+                <Component {...props} />
+            ) : (
+                <Redirect to="/login" />
+            )
+        } 
+        />
+    );
 };
 
 export default PrivateRoute;

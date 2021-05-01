@@ -16,6 +16,13 @@ const reducer = (state = initialState, action) => {
                 profile: action.payload,
                 loading: false
             };
+        case types.CLEAR_PROFILE:
+            return {
+                ...state,
+                profile: null,
+                repos: [],
+                loading: false
+              };      
         case types.PROFILE_ERROR:
             return {
                 ...state,
