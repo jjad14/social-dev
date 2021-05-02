@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector  } from 'react-redux';
 
 import { createProfile, getCurrentProfile } from '../../actions/profile';
@@ -20,7 +20,7 @@ const initalState = {
     github: '', 
 };
 
-const ProfileForm = (props) => {
+const ProfileForm = () => {
     // local state
     const [formData, setFormData] = useState(initalState);
     const [showSocialInputs, setSocialInputs] = useState(false);
@@ -31,6 +31,9 @@ const ProfileForm = (props) => {
     // retrieve state from redux store
     const profile = useSelector(state => state.profile.profile);
     const loading = useSelector(state => state.profile.loading);
+
+    // gives access to the history instance 
+    const history = useHistory();
 
     useEffect(() => {
         // get the current profile
@@ -85,10 +88,10 @@ const ProfileForm = (props) => {
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        
-        console.log(formData);
 
-        // dispatch(createProfile(formData, props.history, profile ? true : false));
+        dispatch(createProfile(
+            formData, history, profile ? true : false
+        ));
     };
 
     return (
@@ -115,6 +118,7 @@ const ProfileForm = (props) => {
                         <option value="Other">Other</option>
                     </select>
                     <small className="form-text">
+                        <span className="text-danger">*</span>&nbsp;
                         What is your job title?
                     </small>
                 </div>
@@ -159,6 +163,7 @@ const ProfileForm = (props) => {
                         value={skills}
                         onChange={onChangeHandler}/>
                     <small className="form-text">
+                        <span className="text-danger">*</span>&nbsp;
                         Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)
                     </small>
                 </div>
@@ -196,16 +201,6 @@ const ProfileForm = (props) => {
 
                 {showSocialInputs && (
                 <Fragment>
-                        {/* Twitter */}
-                        <div className="form-group social-input">
-                            <i className="fab fa-twitter fa-2x" />
-                            <input
-                                type="text"
-                                placeholder="Twitter URL"
-                                name="twitter"
-                                value={twitter}
-                                onChange={onChangeHandler}/>
-                        </div>
                         {/* Facebook */}
                         <div className="form-group social-input">
                             <i className="fab fa-facebook fa-2x" />
@@ -214,6 +209,16 @@ const ProfileForm = (props) => {
                                 placeholder="Facebook URL"
                                 name="facebook"
                                 value={facebook}
+                                onChange={onChangeHandler}/>
+                        </div>
+                        {/* Twitter */}
+                        <div className="form-group social-input">
+                            <i className="fab fa-twitter fa-2x" />
+                            <input
+                                type="text"
+                                placeholder="Twitter URL"
+                                name="twitter"
+                                value={twitter}
                                 onChange={onChangeHandler}/>
                         </div>
                         {/* Youtube */}
