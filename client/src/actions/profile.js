@@ -1,6 +1,6 @@
 import api from '../utils/api';
 import * as types from '../actions/types';
-import { setAlert } from './alert';
+// import { setAlert } from './alert';
 
 // Get users current profile
 export const getCurrentProfile = () => async dispatch => {
@@ -20,4 +20,8 @@ export const getCurrentProfile = () => async dispatch => {
             }
         });
     }
+};
+
+export const createProfile = () => async dispatch => {
+    
 };

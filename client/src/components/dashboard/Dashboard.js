@@ -17,22 +17,23 @@ const Dashboard = () => {
 
     useEffect(() => {
         dispatch(getCurrentProfile());
+    // eslint-disable-next-line
     }, [getCurrentProfile]);
 
     return loading && profile === null 
         ? <Spinner />
         : (
         <Fragment>
-            <h1 className="large text-primary">Dashboard</h1>
+            <h1 className="large text-primary text-center">Dashboard</h1>
             <p className="lead">
                 <i className="fas fa-user"></i>
-                &nbsp; Welcome { user && user.name}
-            </p>
+                &nbsp; Welcome to Social Dev { user && user.name}
+            </p> 
             { 
                 profile !== null 
                 ? <Fragment>has</Fragment>
                 : (<Fragment>
-                    <p>Currently, you do not have a profile, click the button below to get started!</p>
+                    <p className="text-center">Currently, you do not have a profile, click the button below to get started!</p>
                     <Link to="/create-profile" className="btn btn-primary my-1">
                         Create Profile
                     </Link>
