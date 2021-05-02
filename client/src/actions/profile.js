@@ -56,7 +56,10 @@ export const createProfile = (formData, history, edit = false) => async dispatch
 
     dispatch({
       type: types.PROFILE_ERROR,
-      payload: { msg: err.response.data.msg, status: err.response.status }
+      payload: { 
+        msg: err.response.data.msg, 
+        status: err.response.status 
+      }
     });
   }
 };
@@ -85,7 +88,10 @@ export const addExperience = (formData, history) => async dispatch => {
 
     dispatch({
       type: types.PROFILE_ERROR,
-      payload: { msg: err.response.data.msg, status: err.response.status }
+      payload: { 
+        msg: err.response.data.msg, 
+        status: err.response.status 
+      }
     });
   }
 };
@@ -114,7 +120,10 @@ export const addEducation = (formData, history) => async dispatch => {
 
     dispatch({
       type: types.PROFILE_ERROR,
-      payload: { msg: err.response.data.msg, status: err.response.status }
+      payload: { 
+        msg: err.response.data.msg, 
+        status: err.response.status 
+      }
     });
   }
 };
@@ -141,7 +150,10 @@ export const deleteEducation = (id) => async dispatch => {
 
     dispatch({
       type: types.PROFILE_ERROR,
-      payload: { msg: err.response.data.msg, status: err.response.status }
+      payload: { 
+        msg: err.response.data.msg, 
+        status: err.response.status 
+      }
     });
   }
 };
@@ -168,7 +180,34 @@ export const deleteExperience = (id) => async dispatch => {
 
     dispatch({
       type: types.PROFILE_ERROR,
-      payload: { msg: err.response.data.msg, status: err.response.status }
+      payload: { 
+        msg: err.response.data.msg, 
+        status: err.response.status 
+      }
     });
+  }
+};
+
+// Delete account and associated data
+export const deleteAccount = () => async dispatch => {
+  if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    try {
+
+      await api.delete('/profile');
+
+      dispatch({ type: types.CLEAR_PROFILE });
+      dispatch({ type: types.ACCOUNT_DELETED });
+
+      dispatch(setAlert('Your account has been permanently deleted'));
+      
+    } catch (err) {
+      dispatch({
+        type: types.PROFILE_ERROR,
+        payload: { 
+          msg: err.response.data.msg, 
+          status: err.response.status 
+        }
+      });
+    }
   }
 };

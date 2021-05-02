@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // Redux
 import { useDispatch, useSelector  } from 'react-redux';
-import { getCurrentProfile } from '../../actions/profile';
+import { getCurrentProfile, deleteAccount } from '../../actions/profile';
 
 import Spinner from '../layout/Spinner';
 import DashboardActions from './DashboardActions';
@@ -37,6 +37,17 @@ const Dashboard = () => {
                     <DashboardActions />
                     <Education />
                     <Experience />
+                    <br />
+                    <div className="my-2">
+                        <button className="btn btn-danger"
+                            onClick={() => dispatch(deleteAccount())}>
+                                <i className="fas fa-trash"></i>
+                                &nbsp;Delete Account
+                        </button>
+                        <small>
+                            This action is irreversible.
+                        </small>
+                    </div>
                 </Fragment>)
                 : (<Fragment>
                     <p className="text-center">Currently, you do not have a profile, click the button below to get started!</p>

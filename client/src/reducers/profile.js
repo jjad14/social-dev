@@ -28,7 +28,7 @@ const reducer = (state = initialState, action) => {
                 profile: null,
                 repos: [],
                 loading: false
-              };      
+              };     
         case types.PROFILE_ERROR:
             return {
                 ...state,
