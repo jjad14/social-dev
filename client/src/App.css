@@ -153,6 +153,14 @@ img {
   margin: 3rem 0;
 }
 
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
 .btn {
   display: inline-block;
   background: var(--light-color);

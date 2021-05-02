@@ -118,3 +118,13 @@ export const addEducation = (formData, history) => async dispatch => {
     });
   }
 };
+
+// Delete Education
+export const deleteEducation = () => async dispatch => {
+
+};
+
+// Delete Experience
+export const deleteExperience = () => async dispatch => {
+
+};
