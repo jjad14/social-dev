@@ -68,7 +68,7 @@ export const addExperience = (formData, history) => async dispatch => {
     const res = await api.put('/profile/experience', formData);
 
     dispatch({
-      type: UPDATE_PROFILE,
+      type: types.UPDATE_PROFILE,
       payload: res.data
     });
 
@@ -84,7 +84,7 @@ export const addExperience = (formData, history) => async dispatch => {
     }
 
     dispatch({
-      type: PROFILE_ERROR,
+      type: types.PROFILE_ERROR,
       payload: { msg: err.response.data.msg, status: err.response.status }
     });
   }
@@ -97,7 +97,7 @@ export const addEducation = (formData, history) => async dispatch => {
     const res = await api.put('/profile/education', formData);
 
     dispatch({
-      type: UPDATE_PROFILE,
+      type: types.UPDATE_PROFILE,
       payload: res.data
     });
 
@@ -113,7 +113,7 @@ export const addEducation = (formData, history) => async dispatch => {
     }
 
     dispatch({
-      type: PROFILE_ERROR,
+      type: types.PROFILE_ERROR,
       payload: { msg: err.response.data.msg, status: err.response.status }
     });
   }
