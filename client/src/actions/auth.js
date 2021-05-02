@@ -62,6 +62,7 @@ export const login = (email, password) => async dispatch => {
 
   }
   catch (err) {
+    console.log(err);
     const errors = err.response.data.errors;
 
     if (errors) {
