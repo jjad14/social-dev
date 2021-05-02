@@ -36,12 +36,12 @@ const ProfileForm = () => {
     const history = useHistory();
 
     useEffect(() => {
-        // get the current profile
+        // get the current profile, if it is not loaded
         if (!profile) {
             dispatch(getCurrentProfile());
         } 
 
-        // not loading and profile exists
+        // not loading and profile exists (For Updating)
         if (!loading && profile) {
             const profileData = { ...initalState };    
 
@@ -51,14 +51,18 @@ const ProfileForm = () => {
                     profileData[key] = profile[key];
                 }
             }
+            // social links is an object, so we have to map inside
             for (const key in profile.social) {
                 if (key in profileData) {
                     profileData[key] = profile.social[key];
                 } 
             }
-              if (Array.isArray(profileData.skills)) {
+            
+            // skills is an array
+            // so to display them in an input, we join all elements by comma separating them
+            if (Array.isArray(profileData.skills)) {
                   profileData.skills = profileData.skills.join(', ');
-              }
+            }
 
               setFormData(profileData);
         }

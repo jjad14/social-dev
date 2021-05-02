@@ -10,7 +10,7 @@ import setAuthToken from './utils/setAuthToken';
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
-// import Footer from './components/layout/Footer';
+import Footer from './components/layout/Footer';
 import Dashboard from './components/dashboard/Dashboard';
 import ProfileForm from './components/profile-forms/ProfileForm';
 import Register from './components/auth/Register';
@@ -53,9 +53,10 @@ const App = () => {
               <Route exact path="/register" component={Register} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/create-profile" component={ProfileForm} />
+              <PrivateRoute exact path="/edit-profile" component={ProfileForm} />
             </Switch>
           </section>
-
+          <Footer />
         </Fragment>
       </BrowserRouter>
     </Provider>

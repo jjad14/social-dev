@@ -5,6 +5,7 @@ import { useDispatch, useSelector  } from 'react-redux';
 import { getCurrentProfile } from '../../actions/profile';
 
 import Spinner from '../layout/Spinner';
+import DashboardActions from './DashboardActions';
 
 const Dashboard = () => {
     // Access the redux dispatch function
@@ -31,7 +32,9 @@ const Dashboard = () => {
             </p> 
             { 
                 profile !== null 
-                ? <Fragment>has</Fragment>
+                ? <Fragment>
+                    <DashboardActions />
+                </Fragment>
                 : (<Fragment>
                     <p className="text-center">Currently, you do not have a profile, click the button below to get started!</p>
                     <Link to="/create-profile" className="btn btn-primary my-1">
