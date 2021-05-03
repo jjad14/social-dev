@@ -34,12 +34,15 @@ export const getProfiles = () => async dispatch => {
     // call api to get profiles
     const res = await api.get('/profile');
 
+    //console.log(res);
+
     dispatch({
       type: types.GET_PROFILES,
       payload: res.data
     });
   } 
   catch (err) {
+    console.log(err);
     dispatch({
         type: types.PROFILE_ERROR,
         payload: { 
