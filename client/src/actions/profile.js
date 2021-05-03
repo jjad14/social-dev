@@ -24,6 +24,54 @@ export const getCurrentProfile = () => async dispatch => {
   }
 };
 
+// Get all users profiles
+export const getProfiles = () => async dispatch => {
+
+  // Clear current profile
+  dispatch({ type: types.CLEAR_PROFILE });
+
+  try {
+    // call api to get profiles
+    const res = await api.get('/profile');
+
+    dispatch({
+      type: types.GET_PROFILES,
+      payload: res.data
+    });
+  } 
+  catch (err) {
+    dispatch({
+        type: types.PROFILE_ERROR,
+        payload: { 
+            msg: err.response.data.msg, 
+            status: err.response.status 
+        }
+    });
+  }
+};
+
+// Get profile by id
+export const getProfileById = (userId) => async dispatch => {
+  try {
+    // call api to get profile by id
+    const res = await api.get(`/profile/user/${userId}`);
+
+    dispatch({
+      type: types.GET_PROFILE,
+      payload: res.data
+    });
+  } 
+  catch (err) {
+    dispatch({
+        type: types.PROFILE_ERROR,
+        payload: { 
+            msg: err.response.data.msg, 
+            status: err.response.status 
+        }
+    });
+  }
+};
+
 export const createProfile = (formData, history, edit = false) => async dispatch => {
   try {
     // call api to create/update profile
@@ -209,5 +257,27 @@ export const deleteAccount = () => async dispatch => {
         }
       });
     }
+  }
+};
+
+// Get github repositories
+export const getRepositories = (username) => async dispatch => {
+  try {
+    // call api to get profiles
+    const res = await api.get(`/profile/github/${username}`);
+
+    dispatch({
+      type: types.GET_REPOS,
+      payload: res.data
+    });
+  } 
+  catch (err) {
+    dispatch({
+        type: types.PROFILE_ERROR,
+        payload: { 
+            msg: err.response.data.msg, 
+            status: err.response.status 
+        }
+    });
   }
 };
