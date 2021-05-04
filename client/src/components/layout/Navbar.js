@@ -28,7 +28,11 @@ const Navbar = () => {
     const authLinks = (
         <ul>
             <li><Link to="/profiles">Developers</Link></li>
-            <li><Link to="/posts">Posts</Link></li>
+            <li><Link to="/posts">
+                <i className="fas fa-comment-dots"></i>                                
+                &nbsp;<span className="hide-sm">Posts</span> 
+                </Link>
+            </li>
             <li>
                 <Link to="/dashbaord">
                 <i className="fas fa-user"></i>

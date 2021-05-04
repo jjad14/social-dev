@@ -15,6 +15,31 @@ const reducer = (state = initialState, action) => {
                 posts: action.payload,
                 loading: false
             };
+        case types.ADD_POST:
+            return {
+                ...state,
+                posts: [
+                    action.payload,
+                    ...state.posts
+                ],
+                loading: false 
+            };
+        case types.DELETE_POST:
+            return {
+                ...state,
+                posts: state.posts.filter(post => 
+                    post._id !== action.payload),
+                loading: false
+            };
+        case types.UPDATE_LIKES:
+            return {
+                ...state,
+                posts: state.posts.map( post => 
+                    post._id === action.payload.postId 
+                    ? { ...post, likes: action.payload.likes } 
+                    : post ),
+                loading: false
+            };
         case types.POST_ERROR:
             return {
                 ...state,

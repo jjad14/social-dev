@@ -43,7 +43,7 @@ const Profiles = () => {
                                             profile={profile}/>
                                     ))
                                 ) 
-                                : (<h4>No Profiles found</h4>)
+                                : (<h4 className="text-center">No Profiles found</h4>)
                             }
                         </div>
                     </Fragment>
