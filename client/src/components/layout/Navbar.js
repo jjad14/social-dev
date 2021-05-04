@@ -53,7 +53,7 @@ const Navbar = () => {
     return (
         <nav className="navbar bg-dark">
             <h1>
-                <Link to="/">
+                <Link to="/" className="text-light">
                     <i className="fas fa-code"></i>
                     &nbsp; Social Dev
                 </Link>

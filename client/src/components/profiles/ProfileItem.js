@@ -12,7 +12,7 @@ const ProfileItem = ({
     }
 }) => {
     return (
-        <div className="profile bg-light">
+        <div className="profile bg-light card">
             <img src={avatar} alt="" className="round-img"/>
             <div>
                 <h2>{name}</h2>
@@ -23,7 +23,7 @@ const ProfileItem = ({
                 <p className="my-1">
                     { location && <span>{location}</span>}
                 </p>
-                <Link to={`/profiles/${_id}`} className="btn btn-primary">
+                <Link to={`/profile/${_id}`} className="btn btn-primary">
                     View Profile
                 </Link>
             </div>
