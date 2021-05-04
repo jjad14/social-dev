@@ -24,6 +24,28 @@ export const getPosts = () => async dispatch => {
     }
 };
 
+// Get all posts
+export const getPost = (id) => async dispatch => {
+    try {
+        const res = await api.get(`/posts/${id}`);
+    
+        dispatch({
+          type: types.GET_POST,
+          payload: res.data
+        });
+    } 
+    catch (err) {
+        console.log(err.response)
+        dispatch({
+            type: types.POST_ERROR,
+            payload: { 
+                msg: err.response.data.msg, 
+                status: err.response.status 
+            }
+        });
+    }
+};
+
 // Add a Post
 export const addPost = (formData) => async dispatch => {
     try {

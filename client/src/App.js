@@ -21,6 +21,7 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Alert from './components/layout/Alert';
 import Posts from './components/posts/Posts';
+import Post from './components/post/Post';
 
 import PrivateRoute from './components/routing/PrivateRoute';
 import * as types from './actions/types';
@@ -64,6 +65,7 @@ const App = () => {
               <PrivateRoute exact path="/add-experience" component={AddExperience} />
               <PrivateRoute exact path="/add-education" component={AddEducation} />
               <PrivateRoute exact path="/posts" component={Posts} />
+              <PrivateRoute exact path="/posts/:id" component={Post} />
             </Switch>
           </section>
           {/* <Footer /> */}

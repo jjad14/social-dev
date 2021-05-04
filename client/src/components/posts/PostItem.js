@@ -50,7 +50,7 @@ const PostItem = ({
                         Discussion&nbsp;
                         {comments.length > 0 && (
                             <span className="comment-count">
-                                {comments.length}
+                                {comments.length} 
                             </span>
                         )}
                     </Link>
