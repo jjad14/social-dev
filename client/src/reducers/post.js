@@ -46,6 +46,26 @@ const reducer = (state = initialState, action) => {
                     : post ),
                 loading: false
             };
+        case types.ADD_COMMENT:
+            return {
+                ...state,
+                post: { 
+                    ...state.post, 
+                    comments: action.payload 
+                },
+                loading: false
+            };
+        case types.REMOVE_COMMENT:
+            return {
+                ...state,
+                post: {
+                ...state.post,
+                comments: state.post.comments.filter(comment => 
+                    comment._id !== action.payload
+                )
+                },
+                loading: false
+            };
         case types.POST_ERROR:
             return {
                 ...state,

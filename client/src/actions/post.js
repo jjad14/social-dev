@@ -35,7 +35,6 @@ export const getPost = (id) => async dispatch => {
         });
     } 
     catch (err) {
-        console.log(err.response)
         dispatch({
             type: types.POST_ERROR,
             payload: { 
@@ -135,3 +134,50 @@ export const removeLike = (postId) => async dispatch => {
     }
 };
 
+// Add a comment to a post
+export const addComment = (postId, formData) => async dispatch => {
+    try {
+        const res = await api.post(`/posts/comment/${postId}`, formData);
+    
+        dispatch({
+          type: types.ADD_COMMENT,
+          payload: res.data
+        });
+
+        dispatch(setAlert('Added Comment', 'success'));
+    } 
+    catch (err) {
+        dispatch({
+            type: types.POST_ERROR,
+            payload: { 
+                msg: err.response.statusText, 
+                status: err.response.status 
+            }
+        });
+    }
+
+};
+
+// Delete a comment from a post
+export const deleteComment = (postId, commentId) => async dispatch => {
+    try {
+        await api.delete(`/posts/comment/${postId}/${commentId}`);
+    
+        dispatch({
+          type: types.REMOVE_COMMENT,
+          payload: commentId
+        });
+
+        dispatch(setAlert('Removed Comment', 'success'));
+    } 
+    catch (err) {
+        dispatch({
+            type: types.POST_ERROR,
+            payload: { 
+                msg: err.response.statusText, 
+                status: err.response.status 
+            }
+        });
+    }
+
+};
