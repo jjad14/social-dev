@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +46,7 @@ const AddExperience = () => {
     };
 
     return (
-        <Fragment>
+        <div style={{marginBottom: '200px'}}>
           <h1 className="large text-primary">Add Your Experience</h1>
           <p className="lead">
             <i className="fas fa-code-branch" />&nbsp;
@@ -140,7 +140,7 @@ const AddExperience = () => {
               Go Back
             </Link>
           </form>
-        </Fragment>
+        </div>
     );
 };
 

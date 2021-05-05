@@ -99,7 +99,7 @@ const ProfileForm = () => {
     };
 
     return (
-        <Fragment>
+        <div style={{marginBottom: '200px'}}>
             <h1 className="large text-primary">Edit Your Profile</h1>
             <p className="lead">
                 <i className="fas fa-user"></i>&nbsp;
@@ -273,7 +273,7 @@ const ProfileForm = () => {
                     Go Back
                 </Link>
             </form>
-        </Fragment>
+        </div>
     );
 };
 

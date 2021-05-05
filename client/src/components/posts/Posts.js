@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PostItem from './PostItem';
@@ -20,7 +20,7 @@ const Posts = () => {
     }, [getPosts]);
 
     return loading ? <Spinner /> : (
-        <Fragment>
+        <div style={{marginBottom: '200px'}}>
             <h1 className="large text-primary">Posts</h1>
             <p className="lead">
                 <i className="fas fa-user"/> &nbsp; 
@@ -32,7 +32,7 @@ const Posts = () => {
                     <PostItem key={post._id} post={post} />
                 ))}
             </div>
-        </Fragment>
+        </div>
     );
 };
 

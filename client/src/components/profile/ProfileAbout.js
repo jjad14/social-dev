@@ -14,11 +14,11 @@ const ProfileAbout = ({
         <h2 className="text-primary">
           About Me
         </h2>
-        <p>{bio}</p>
-        <hr />
+        <p className="mb-2">{bio}</p>
       </Fragment>
     )}
-    <h2 className="text-primary">Skill Set</h2>
+    <hr />
+    <h2 className="text-primary mt-2">Skill Set</h2>
     <div className="skills">
       {skills.map((skill, index) => (
         <div key={index} className="p-1">
