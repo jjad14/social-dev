@@ -20,7 +20,7 @@ const Profiles = () => {
 
     
     return (
-        <Fragment>
+        <div style={{marginBottom: '200px'}}>
             {
                 loading 
                 ? <Spinner />
@@ -49,7 +49,7 @@ const Profiles = () => {
                     </Fragment>
                 ) 
             }
-        </Fragment>
+        </div>
     );
 };
 

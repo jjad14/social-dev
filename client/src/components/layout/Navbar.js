@@ -34,7 +34,7 @@ const Navbar = () => {
                 </Link>
             </li>
             <li>
-                <Link to="/dashbaord">
+                <Link to="/dashboard">
                 <i className="fas fa-user"></i>
                 &nbsp;<span className="hide-sm">Dashboard</span>
                 </Link>
